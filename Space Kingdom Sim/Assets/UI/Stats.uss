@@ -1,0 +1,14 @@
+.text {
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    background-color: rgba(31, 29, 29, 0);
+    color: rgb(255, 255, 255);
+    -unity-text-align: upper-left;
+    padding-left: 10px;
+}
+
+.text:hover {
+    color: rgb(98, 229, 229);
+}

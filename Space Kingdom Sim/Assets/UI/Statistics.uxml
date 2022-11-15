@@ -1,0 +1,4 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Stats.uss?fileID=7433441132597879392&amp;guid=7102a99bd93a6d1468a05963bd005c31&amp;type=3#Stats" />
+    <ui:VisualElement name="StatisticsPanel" style="width: 19%; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 2px; border-bottom-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; align-self: flex-end; background-color: rgb(19, 19, 19); align-items: stretch; justify-content: flex-end;" />
+</ui:UXML>
