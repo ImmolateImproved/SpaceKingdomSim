@@ -81,7 +81,7 @@ public partial struct FindTargetSystem : ISystem
 
         public float dt;
 
-        public void Execute(in ColliderAspect colliderAspect, in TargetSeeker seeker, ref TargetData targetData, ref TargetSeekResult targetSeekResult, ref TargetSeekTimer targetSeekTimer)
+        public void Execute(in ColliderAspect colliderAspect, in TargetSeeker seeker, ref MovementTarget targetData, ref TargetSeekResult targetSeekResult, ref TargetSeekTimer targetSeekTimer)
         {
             targetSeekTimer.timer += dt;
 

@@ -68,7 +68,7 @@ public partial class StatisticsSystem : SystemBase
         if (!ui) return;
         ui.MaxLabelCount = 3;
         Entities.WithAll<Selected>()
-            .ForEach((Entity e, in TargetSeekResult seekResult, in TargetData targetData, in TargetSeekTimer seekTimer) =>
+            .ForEach((Entity e, in TargetSeekResult seekResult, in MovementTarget targetData, in TargetSeekTimer seekTimer) =>
             {
                 ui.SetUnitDebugInfo($"SeekTimer {seekTimer.timer}");
                 ui.SetUnitDebugInfo($"Distance to target {(int)targetData.distanceToTarget}");

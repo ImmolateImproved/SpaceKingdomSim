@@ -49,15 +49,15 @@ public partial struct DestroyNearestTargetSystem : ISystem
 
         public EntityCommandBuffer.ParallelWriter ecb;
 
-        public void Execute([ChunkIndexInQuery] int chunkIndex, ref TargetSeekResult targetSeeker, ref TargetSeekTimer targetSeekTimer, in TargetData targetData, in Energy energy)
+        public void Execute([ChunkIndexInQuery] int chunkIndex, ref TargetSeekResult seekResult, ref TargetSeekTimer targetSeekTimer, in Energy energy)
         {
-            if (!targetData.isTargetEntityValid)
+            if (!seekResult.isTargetExist)
                 return;
 
-            if (energy.current >= energyLookup[targetSeeker.target].current)
+            if (energy.current >= energyLookup[seekResult.target].current)
             {
                 targetSeekTimer.timer = targetSeekTimer.delayBetweenTargetSearch;
-                ecb.DestroyEntity(chunkIndex, targetSeeker.target);
+                ecb.DestroyEntity(chunkIndex, seekResult.target);
             }
         }
     }

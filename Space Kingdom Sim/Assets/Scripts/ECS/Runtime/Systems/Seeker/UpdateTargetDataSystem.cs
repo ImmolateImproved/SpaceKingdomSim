@@ -51,19 +51,19 @@ public partial struct UpdateTargetDataSystem : ISystem
         [ReadOnly]
         public ComponentLookup<Rotation> rotationLookup;
 
-        public void Execute(TargetDataAspect targetDataAspect, in TargetSeekResult seekResult)
+        public void Execute(TargetDataAspect targetDataAspect)
         {
-            targetDataAspect.IsTargetValid = translationLookup.HasComponent(seekResult.target);
-            targetDataAspect.IsTargetPositionValid = targetDataAspect.IsTargetValid;
+            targetDataAspect.IsTargetExist = translationLookup.HasComponent(targetDataAspect.Target);
+            targetDataAspect.IsTargetPositionValid = targetDataAspect.IsTargetExist;
 
-            if (!targetDataAspect.IsTargetValid)
+            if (!targetDataAspect.IsTargetExist)
             {
                 targetDataAspect.TargetInRange = false;
                 return;
             }
 
-            var targetPos = translationLookup[seekResult.target].Value;
-            var targetDirection = math.forward(rotationLookup[seekResult.target].Value);
+            var targetPos = translationLookup[targetDataAspect.Target].Value;
+            var targetDirection = math.forward(rotationLookup[targetDataAspect.Target].Value);
 
             targetDataAspect.Update(targetPos, targetDirection);
         }
@@ -78,7 +78,7 @@ public partial struct UpdateTargetDataSystem : ISystem
 
         public void Execute(TargetDataAspect targetDataAspect)
         {
-            targetDataAspect.IsTargetValid = false;
+            targetDataAspect.IsTargetExist = false;
             targetDataAspect.IsTargetPositionValid = true;
             mousePos.y = 0;
             targetDataAspect.Update(mousePos, float3.zero);

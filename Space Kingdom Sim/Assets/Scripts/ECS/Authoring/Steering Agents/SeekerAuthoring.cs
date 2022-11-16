@@ -35,7 +35,7 @@ public class SeekerAuthoring : MonoBehaviour
             AddComponent(new TargetInRange());
             AddComponent(new TargetSeekResult());
             AddComponent(new PhysicsData());
-            AddComponent(new TargetData());
+            AddComponent(new MovementTarget());
 
             AddComponent(new MaxSpeed
             {

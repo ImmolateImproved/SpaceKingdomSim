@@ -16,16 +16,16 @@ public struct TargetSeekResult : IComponentData
 {
     public Entity target;
     public float targetType;
+    public bool isTargetExist;
 }
 
-public struct TargetData : IComponentData
+public struct MovementTarget : IComponentData
 {
     public float3 targetPosition;
 
     public float distanceToTarget;
 
     public bool isTargetPositionValid;
-    public bool isTargetEntityValid;
 }
 
 public struct TargetSeeker : IComponentData
@@ -90,7 +90,8 @@ public struct InitialSeekerStats : IComponentData
 
 public readonly partial struct TargetDataAspect : IAspect
 {
-    readonly RefRW<TargetData> targetData;
+    readonly RefRW<TargetSeekResult> seek;
+    readonly RefRW<MovementTarget> targetData;
     readonly RefRO<TargetSeeker> targetSeeker;
     readonly RefRO<SteeringAgent> steeringAgent;
     readonly RefRO<Translation> translation;
@@ -99,16 +100,18 @@ public readonly partial struct TargetDataAspect : IAspect
 
     private float PredictionAmount => steeringAgent.ValueRO.predictionAmount;
 
+    public Entity Target => seek.ValueRO.target;
+
     public bool TargetInRange
     {
         get => enabledRefRW.ValueRO;
         set => enabledRefRW.ValueRW = value;
     }
 
-    public bool IsTargetValid
+    public bool IsTargetExist
     {
-        get => targetData.ValueRO.isTargetEntityValid;
-        set => targetData.ValueRW.isTargetEntityValid = value;
+        get => seek.ValueRO.isTargetExist;
+        set => seek.ValueRW.isTargetExist = value;
     }
 
     public bool IsTargetPositionValid
