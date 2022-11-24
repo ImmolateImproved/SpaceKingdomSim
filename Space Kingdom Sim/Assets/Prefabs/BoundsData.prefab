@@ -44,12 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d218e41b4ec2b694b94c591695e9418d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionFactory: {fileID: 1058882952687463801}
+  boundsData: {fileID: 1058882952687463801}
   spawnRequests:
   - prefab: {fileID: 7537620824612499801, guid: f4e00f5149fb9154596266d935680d52, type: 3}
-    count: 1
-  - prefab: {fileID: 7537620824612499801, guid: d25d49fef0e806341856668e239d00f6, type: 3}
     count: 0
+  - prefab: {fileID: 7537620824612499801, guid: d25d49fef0e806341856668e239d00f6, type: 3}
+    count: 5
   timeBetweenSpawns: 0
 --- !u!1 &1058882951435089219
 GameObject:
@@ -67,7 +67,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1058882951435089217
 Transform:
   m_ObjectHideFlags: 0
@@ -95,11 +95,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d218e41b4ec2b694b94c591695e9418d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionFactory: {fileID: 1058882952687463801}
+  boundsData: {fileID: 1058882952687463801}
   spawnRequests:
   - prefab: {fileID: 6318504723000294576, guid: 72ca5d1ed09d91e489c80c94691218bc, type: 3}
-    count: 25
-  timeBetweenSpawns: 10
+    count: 1
+  timeBetweenSpawns: 1
 --- !u!1 &1058882951797723171
 GameObject:
   m_ObjectHideFlags: 0
@@ -144,10 +144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d218e41b4ec2b694b94c591695e9418d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionFactory: {fileID: 1058882952687463801}
+  boundsData: {fileID: 1058882952687463801}
   spawnRequests:
   - prefab: {fileID: 6318504723000294576, guid: 72ca5d1ed09d91e489c80c94691218bc, type: 3}
-    count: 25
+    count: 55
   timeBetweenSpawns: 0
 --- !u!1 &1058882952473024206
 GameObject:
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 1058882952473024204}
   - component: {fileID: 1058882952473024203}
   m_Layer: 0
-  m_Name: WorldBounds
+  m_Name: OutOfBoundsSteering
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -193,10 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2563b76b19982864bac78a217d3c83db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionFactory: {fileID: 1058882952687463801}
-  bounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 500, y: 0, z: 500}
+  boundsData: {fileID: 1058882952687463801}
   steeringForce: 1
 --- !u!1 &1058882952687463802
 GameObject:
@@ -209,7 +206,7 @@ GameObject:
   - component: {fileID: 1058882952687463800}
   - component: {fileID: 1058882952687463801}
   m_Layer: 0
-  m_Name: SpawnPositionSettings
+  m_Name: BoundsData
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -232,7 +229,7 @@ Transform:
   - {fileID: 1903995338}
   - {fileID: 1058882951435089217}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1058882952687463801
 MonoBehaviour:
@@ -246,6 +243,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342d664014fff694f838ca61635c39e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  factoryType: 0
+  boundsType: 0
   bounds: {x: 25, y: 0, z: 25}
   maxRadius: 50

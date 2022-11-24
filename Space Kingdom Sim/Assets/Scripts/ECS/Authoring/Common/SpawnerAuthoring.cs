@@ -12,7 +12,7 @@ public struct SpawnRequestData
 
 public class SpawnerAuthoring : MonoBehaviour
 {
-    public PositionFactoryData positionFactory;
+    public BoundsData boundsData;
 
     public SpawnRequestData[] spawnRequests;
 
@@ -22,12 +22,12 @@ public class SpawnerAuthoring : MonoBehaviour
     {
         public override void Bake(SpawnerAuthoring authoring)
         {
-            DependsOn(authoring.positionFactory);
-            DependsOn(authoring.transform);
+            var boundsData = authoring.boundsData;
+
+            DependsOn(boundsData);
+            DependsOn(boundsData.transform);
 
             var random = Random.CreateFromIndex((uint)(System.DateTime.Now.Millisecond + authoring.GetInstanceID()));
-
-            var positionFactory = authoring.positionFactory;
 
             if (authoring.timeBetweenSpawns > 0)
             {
@@ -38,26 +38,26 @@ public class SpawnerAuthoring : MonoBehaviour
                 });
             }
 
-            switch (positionFactory.factoryType)
+            switch (boundsData.boundsType)
             {
-                case PositionFactoryEnum.Square:
+                case BoundsEnum.Square:
                     {
                         AddComponent(new GridPositionFactory
                         {
-                            maxPosition = positionFactory.bounds,
-                            minPosition = -positionFactory.bounds,
+                            maxPosition = boundsData.bounds,
+                            minPosition = -boundsData.bounds,
                             offset = authoring.transform.position,
                             random = random
                         });
 
                         break;
                     }
-                case PositionFactoryEnum.Circle:
+                case BoundsEnum.Circle:
                     {
                         AddComponent(new CircularPositionFactory
                         {
                             center = authoring.transform.position,
-                            maxRadius = positionFactory.maxRadius,
+                            maxRadius = boundsData.maxRadius,
                             random = random
                         });
                         break;

@@ -1,29 +1,24 @@
 ﻿using Unity.Entities;
-using UnityEditor;
 using UnityEngine;
 
 public class OutOfBoundSteeringAuthoring : MonoBehaviour
 {
-    public PositionFactoryData positionFactory;
-
-    public Bounds bounds;
+    public BoundsData boundsData;
     public float steeringForce;
 
     class OutOfBoundSteerinBaker : Baker<OutOfBoundSteeringAuthoring>
     {
         public override void Bake(OutOfBoundSteeringAuthoring authoring)
         {
-            var posFactory = authoring.positionFactory;
+            var boundsData = authoring.boundsData;
 
-            var bounds = authoring.bounds;
+            DependsOn(boundsData);
+            DependsOn(boundsData.transform);
 
-            if (posFactory)
-            {
-                DependsOn(posFactory.transform);
+            var bounds = default(Bounds);
 
-                bounds.center = posFactory.transform.position;
-                bounds.extents = posFactory.bounds;
-            }
+            bounds.center = boundsData.transform.position;
+            bounds.extents = boundsData.bounds;
 
             AddComponent(new OutOfBoundSteering
             {

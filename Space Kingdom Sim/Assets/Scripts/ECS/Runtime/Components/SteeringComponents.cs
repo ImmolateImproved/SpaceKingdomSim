@@ -63,20 +63,13 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
         targetIsBehind = math.dot(ltw.ValueRO.Forward, desiredDirection) < 0;
 
-        var directionWhenTargetIsBehind = DirectionWhenTargetIsBehind(ltw.ValueRO.Right, desiredDirection);
-
-        desiredDirection = targetIsBehind
-            ? directionWhenTargetIsBehind
-            : desiredDirection;
+        if (targetIsBehind)
+        {
+            var horizontalDirection = MathUtils.HorizontalDirectionToTarget(ltw.ValueRO.Right, desiredDirection);
+            desiredDirection = ltw.ValueRO.Right * horizontalDirection;
+        }
 
         return desiredDirection;
-
-        static float3 DirectionWhenTargetIsBehind(float3 right, float3 desiredDirection)
-        {
-            var horizontalDirection = MathUtils.HorizontalDirectionToTarget(right, desiredDirection);
-
-            return right * horizontalDirection;
-        }
     }
 
     private float GetDesiredSpeed(float slowRaius, float distanceToTarget)

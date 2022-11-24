@@ -435,7 +435,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uIDocument: {fileID: 2105748344}
-  styleSheet: {fileID: 7433441132597879392, guid: 7102a99bd93a6d1468a05963bd005c31, type: 3}
 --- !u!1 &2138677391
 GameObject:
   m_ObjectHideFlags: 0

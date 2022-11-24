@@ -1,18 +1,18 @@
 using UnityEditor;
 
-[CustomEditor(typeof(PositionFactoryData))]
+[CustomEditor(typeof(BoundsData))]
 public class PositionFactoryDataEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        var thisObject = target as PositionFactoryData;
+        var thisObject = target as BoundsData;
 
         DisplayCommonSettings();
 
-        switch (thisObject.factoryType)
+        switch (thisObject.boundsType)
         {
-            case PositionFactoryEnum.Square: DisplaySquareSettings(); break;
-            case PositionFactoryEnum.Circle: DisplayCircleSettings(); break;
+            case BoundsEnum.Square: DisplaySquareSettings(); break;
+            case BoundsEnum.Circle: DisplayCircleSettings(); break;
         }
 
         serializedObject.ApplyModifiedProperties();
@@ -20,7 +20,7 @@ public class PositionFactoryDataEditor : Editor
 
     private void DisplayCommonSettings()
     {
-        EditorGUILayout.PropertyField(serializedObject.FindProperty("factoryType"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("boundsType"));
     }
 
     private void DisplaySquareSettings()
