@@ -1,12 +1,12 @@
 ﻿using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
-using UnityEngine;
 
 [BurstCompile]
-[UpdateBefore(typeof(MovementSystem))]
+[UpdateAfter(typeof(FindTargetSystem))]
+[UpdateBefore(typeof(UpdateTargetDataSystem))]
+[DisableAutoCreation]
 public partial struct OutOfBoundsSteeringSystem : ISystem
 {
     [BurstCompile]
@@ -25,24 +25,26 @@ public partial struct OutOfBoundsSteeringSystem : ISystem
     {
         var outOfBoundSteeringData = SystemAPI.GetSingleton<OutOfBoundSteering>();
 
-        new SquareBoundsJob
+        new BoundsJob
         {
             outOfBoundData = outOfBoundSteeringData
 
         }.ScheduleParallel();
-
     }
 
     [BurstCompile]
-    partial struct SquareBoundsJob : IJobEntity
+    partial struct BoundsJob : IJobEntity
     {
         public OutOfBoundSteering outOfBoundData;
 
-        public void Execute(SteeringAgentAspect steeringAgentAspect)
+        public void Execute(TargetDataAspect targetDataAspect)
         {
-            if (!outOfBoundData.squareBounds.Contains(steeringAgentAspect.Position))
+            if (!outOfBoundData.squareBounds.Contains(targetDataAspect.Position))
             {
-                steeringAgentAspect.Steer(outOfBoundData.squareBounds.center, outOfBoundData.steeringForce);
+                targetDataAspect.IsTargetExist = false;
+                targetDataAspect.IsTargetPositionValid = true;
+
+                targetDataAspect.Update(outOfBoundData.squareBounds.center);
             }
         }
     }

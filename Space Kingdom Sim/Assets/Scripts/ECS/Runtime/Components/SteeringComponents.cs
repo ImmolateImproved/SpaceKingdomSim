@@ -4,6 +4,16 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
+public struct FollowMouse : IComponentData
+{
+
+}
+
+public struct InBounds : IComponentData, IEnableableComponent
+{
+
+}
+
 public struct SteeringAgent : IComponentData
 {
     public float attractionForce;
@@ -36,24 +46,24 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
         var slowRaius = SlowRadius;
 
-        var dot = math.dot(ltw.ValueRO.Forward, desiredVelocity);
-        if (dot < 0)
+        var targetIsBehind = math.dot(ltw.ValueRO.Forward, desiredVelocity) < 0;
+
+        if (targetIsBehind)
         {
-            var targetDir = math.dot(ltw.ValueRO.Right, desiredVelocity);
-            var rotationDir = (targetDir >= 0f) ? 1f : (-1f);
-            desiredVelocity = math.mul(Rotation, new float3(rotationDir, 0, 0));
+            var targetDir = Mathf.Sign(math.dot(ltw.ValueRO.Right, desiredVelocity));
+            desiredVelocity = math.mul(Rotation, new float3(targetDir, 0, 0));
             slowRaius = 0;
         }
 
         var distanceToTarget = math.length(desiredVelocity);
 
         var desiredSpeed = distanceToTarget > slowRaius
-            ? physicsBodyAspect.MaxSpeed
-            : math.remap(0, slowRaius, 0, physicsBodyAspect.MaxSpeed, distanceToTarget);
+        ? physicsBodyAspect.MaxSpeed
+        : math.remap(0, slowRaius, 0, physicsBodyAspect.MaxSpeed, distanceToTarget);
 
-        var steeringForce = MathUtils.SetMagnitude(desiredVelocity, desiredSpeed);
+        desiredVelocity = MathUtils.SetMagnitude(desiredVelocity, desiredSpeed);
 
-        steeringForce -= physicsBodyAspect.Velocity;
+        var steeringForce = desiredVelocity - physicsBodyAspect.Velocity;
 
         steeringForce = MathUtils.ClampMagnitude(steeringForce, MaxForce);
 

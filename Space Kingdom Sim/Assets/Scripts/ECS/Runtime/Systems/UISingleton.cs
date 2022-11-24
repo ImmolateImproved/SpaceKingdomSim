@@ -11,8 +11,6 @@ public class UISingleton : MonoBehaviour
     private VisualElement parent;
 
     private List<Label> labels = new List<Label>();
-    private int currentLabel;
-    public int MaxLabelCount { get; set; }
 
     private void Awake()
     {
@@ -23,19 +21,18 @@ public class UISingleton : MonoBehaviour
         parent = root.Q<VisualElement>("StatisticsPanel");
     }
 
-    public void SetUnitDebugInfo(string unitInfo)
+    public void ShowUnitDebugInfo(int index, string unitInfo)
     {
-        if (labels.Count >= MaxLabelCount)
+        if (labels.Count > index)
         {
-            labels[currentLabel].text = unitInfo;
-            currentLabel = (currentLabel + 1) % MaxLabelCount;
+            labels[index].text = unitInfo;
             return;
         }
-        
+
         var label = new Label(unitInfo);
-        
+
         label.AddToClassList("text");
-        labels.Add(label);
         parent.Add(label);
+        labels.Add(label);
     }
 }

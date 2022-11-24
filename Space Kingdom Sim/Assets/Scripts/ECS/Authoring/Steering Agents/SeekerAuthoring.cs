@@ -1,5 +1,5 @@
 using Unity.Entities;
-using Unity.Mathematics;
+using Unity.Physics.Authoring;
 using UnityEngine;
 
 [System.Serializable]
@@ -13,6 +13,8 @@ public struct SeekerData
     public float stopRange;
     public float predictionAmount;
     public float searchRadius;
+    public PhysicsCategoryTags belongsTo;
+    public PhysicsCategoryTags collidesWith;
 }
 
 public class SeekerAuthoring : MonoBehaviour
@@ -23,8 +25,6 @@ public class SeekerAuthoring : MonoBehaviour
 
     public float maxForce;
 
-    public float delayBetweenTargetSearch;
-
     public SeekerData seekerData;
 
     class SeekerBaker : Baker<SeekerAuthoring>
@@ -33,7 +33,7 @@ public class SeekerAuthoring : MonoBehaviour
         {
             AddComponent(new InactiveState());
             AddComponent(new TargetInRange());
-            AddComponent(new TargetSeekResult());
+            AddComponent(new TargetData());
             AddComponent(new PhysicsData());
             AddComponent(new MovementTarget());
 
@@ -58,13 +58,13 @@ public class SeekerAuthoring : MonoBehaviour
             AddComponent(new TargetSeeker
             {
                 searchRadius = seekerData.searchRadius,
-                stopRange = seekerData.stopRange
-            });
+                stopRange = seekerData.stopRange,
 
-            AddComponent(new TargetSeekTimer
-            {
-                delayBetweenTargetSearch = authoring.delayBetweenTargetSearch,
-                timer = authoring.delayBetweenTargetSearch
+                targetLayer = new Unity.Physics.CollisionFilter
+                {
+                    BelongsTo = seekerData.belongsTo.Value,
+                    CollidesWith = seekerData.collidesWith.Value
+                }
             });
 
             if (authoring.followMouse)

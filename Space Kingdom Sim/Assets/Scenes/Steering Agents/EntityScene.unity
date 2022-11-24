@@ -212,6 +212,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1903995337, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1903995339, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: spawnRequests.Array.data[0].count
       value: 1
@@ -220,11 +224,31 @@ PrefabInstance:
       propertyPath: spawnRequests.Array.data[1].count
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1058882951435089219, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 1058882951435089218, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: timeBetweenSpawns
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1058882951435089218, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: spawnRequests.Array.data[0].count
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058882951435089219, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058882951797723170, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: spawnRequests.Array.data[0].count
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 1058882951797723171, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058882952473024203, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: steeringForce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058882952473024206, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -275,6 +299,10 @@ PrefabInstance:
     - target: {fileID: 1058882952687463802, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: m_Name
       value: SpawnPositionSettings
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058882952687463802, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

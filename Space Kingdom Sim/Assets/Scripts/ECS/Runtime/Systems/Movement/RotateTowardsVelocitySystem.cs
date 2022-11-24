@@ -1,19 +1,16 @@
 ﻿using Unity.Burst;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Transforms;
 
 [BurstCompile]
 [UpdateAfter(typeof(MovementSystem))]
 public partial struct RotateTowardsVelocitySystem : ISystem
 {
-    [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
 
     }
 
-    [BurstCompile]
     public void OnDestroy(ref SystemState state)
     {
 

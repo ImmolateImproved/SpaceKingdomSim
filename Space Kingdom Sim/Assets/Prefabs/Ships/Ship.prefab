@@ -193,11 +193,13 @@ MonoBehaviour:
   followMouse: 0
   maxSpeed: 8
   maxForce: 1
+  delayBetweenTargetSearch: 0
   seekerData:
     unitType: 100
     attractionForce: 1
-    hungerAttractionBonus: 0
+    additionalAttraction: 0
     slowRadius: 0
+    stopRange: 0
     predictionAmount: 0
     searchRadius: 100
 --- !u!114 &-2388626475485151188

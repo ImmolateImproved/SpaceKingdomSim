@@ -1,10 +1,8 @@
 ﻿using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Physics;
-using Unity.Physics.Aspects;
-using UnityEngine;
+using Unity.Transforms;
 
 [BurstCompile]
 public partial struct FindTargetSystem : ISystem
@@ -26,44 +24,13 @@ public partial struct FindTargetSystem : ISystem
         var unitTypeLookup = SystemAPI.GetComponentLookup<UnitType>(true);
         var inactiveStateLookup = SystemAPI.GetComponentLookup<InactiveState>(true);
 
-        var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
-        var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
-
-        var dt = SystemAPI.Time.DeltaTime;
-
-        new InactiveStateJob
-        {
-            dt = dt,
-            ecb = ecb
-
-        }.Schedule();
-
         new FindTargetJob
         {
             physicsWorld = physicsWorld,
             unitTypeLookup = unitTypeLookup,
-            inactiveStateLookup = inactiveStateLookup,
-            dt = dt
+            inactiveStateLookup = inactiveStateLookup
 
         }.ScheduleParallel();
-    }
-
-    [BurstCompile]
-    partial struct InactiveStateJob : IJobEntity
-    {
-        public EntityCommandBuffer ecb;
-
-        public float dt;
-
-        public void Execute(Entity e, ref InactiveState inactiveState)
-        {
-            inactiveState.timer += dt;
-
-            if (inactiveState.timer >= inactiveState.duration)
-            {
-                ecb.RemoveComponent<InactiveState>(e);
-            }
-        }
     }
 
     [BurstCompile]
@@ -79,55 +46,35 @@ public partial struct FindTargetSystem : ISystem
         [ReadOnly]
         public ComponentLookup<InactiveState> inactiveStateLookup;
 
-        public float dt;
-
-        public void Execute(in ColliderAspect colliderAspect, in TargetSeeker seeker, ref MovementTarget targetData, ref TargetSeekResult targetSeekResult, ref TargetSeekTimer targetSeekTimer)
+        public void Execute(Entity e, in Translation translation, in TargetSeeker seeker, ref TargetData targetData)
         {
-            targetSeekTimer.timer += dt;
+            if (unitTypeLookup.HasComponent(targetData.target)) return;
 
-            if (targetSeekTimer.timer < targetSeekTimer.delayBetweenTargetSearch) return;
-
-            var distanceHits = new NativeList<DistanceHit>(Allocator.Temp);
-            physicsWorld.CalculateDistance(colliderAspect, seeker.searchRadius, ref distanceHits);
-
-            var target = Entity.Null;
-            var targetType = 0f;
-            var distanceToTarget = math.INFINITY;
-
-            for (int j = 0; j < distanceHits.Length; j++)
+            var input = new PointDistanceInput
             {
-                var distanceHit = distanceHits[j];
+                Position = translation.Value,
+                MaxDistance = seeker.searchRadius,
+                Filter = seeker.targetLayer
+            };
 
-                var ignoreUnit = inactiveStateLookup.HasComponent(distanceHit.Entity)
-                                 || !unitTypeLookup.HasComponent(distanceHit.Entity);
+            var collector = new FindTargetCollector(e, seeker.searchRadius, unitTypeLookup, inactiveStateLookup);
+            physicsWorld.CalculateDistance(input, ref collector);
 
-                if (ignoreUnit)
-                    continue;
+            var result = collector.FindTarget();
 
-                var currentTargetType = unitTypeLookup[distanceHit.Entity].value;
-
-                var currentDistanceToTarget = distanceHit.Distance;
-
-                if (currentDistanceToTarget <= distanceToTarget)
-                {
-                    target = distanceHit.Entity;
-                    targetType = currentTargetType;
-                    distanceToTarget = currentDistanceToTarget;
-                }
-            }
-
-            if (target != Entity.Null)
-            {
-                targetSeekTimer.timer = 0;
-            }
-
-            targetData.distanceToTarget = distanceToTarget;
-            targetSeekResult.target = target;
-            targetSeekResult.targetType = targetType;
+            targetData.target = result.target;
+            targetData.targetType = result.targetType;
         }
     }
 
-    private struct IngnoreSelfCollector : ICollector<DistanceHit>
+    public struct TargetSeekResult
+    {
+        public Entity target;
+        public float distanceToTarget;
+        public float targetType;
+    }
+
+    private struct FindTargetCollector : ICollector<DistanceHit>
     {
         public bool EarlyOutOnFirstHit => false;
 
@@ -135,31 +82,66 @@ public partial struct FindTargetSystem : ISystem
 
         public int NumHits { get; private set; }
 
-        public DistanceHit ClosestHit;
+        [ReadOnly]
+        public ComponentLookup<UnitType> unitTypeLookup;
+
+        [ReadOnly]
+        public ComponentLookup<InactiveState> inactiveStateLookup;
+
+        public NativeList<TargetSeekResult> targetSeekResults;
 
         private Entity entityToIgnore;
 
-        public IngnoreSelfCollector(Entity entityToIgnore, float maxDistance)
+        public FindTargetCollector(Entity entityToIgnore, float maxDistance, ComponentLookup<UnitType> unitTypeLookup, ComponentLookup<InactiveState> inactiveStateLookup)
         {
-            this.entityToIgnore = entityToIgnore;
-
             MaxFraction = maxDistance;
-            ClosestHit = default;
             NumHits = 0;
+
+            targetSeekResults = new NativeList<TargetSeekResult>(4, Allocator.Temp);
+
+            this.entityToIgnore = entityToIgnore;
+            this.unitTypeLookup = unitTypeLookup;
+            this.inactiveStateLookup = inactiveStateLookup;
         }
 
         public bool AddHit(DistanceHit hit)
         {
-            if (hit.Entity == entityToIgnore)
+            var ignoreUnit = hit.Entity == entityToIgnore
+                || inactiveStateLookup.HasComponent(hit.Entity)
+                || !unitTypeLookup.HasComponent(hit.Entity);
+
+            if (ignoreUnit) return false;
+
+            var targetSeekResult = new TargetSeekResult
             {
-                return false;
+                target = hit.Entity,
+                distanceToTarget = hit.Distance,
+                targetType = unitTypeLookup[hit.Entity].value
+            };
+
+            targetSeekResults.Add(targetSeekResult);
+
+            return false;
+        }
+
+        public TargetSeekResult FindTarget()
+        {
+            var result = new TargetSeekResult
+            {
+                distanceToTarget = float.PositiveInfinity
+            };
+
+            for (int i = 0; i < targetSeekResults.Length; i++)
+            {
+                var targetData = targetSeekResults[i];
+
+                if (targetData.distanceToTarget <= result.distanceToTarget)
+                {
+                    result = targetData;
+                }
             }
 
-            ClosestHit = hit;
-            MaxFraction = hit.Fraction;
-            NumHits = 1;
-
-            return true;
+            return result;
         }
     }
 }

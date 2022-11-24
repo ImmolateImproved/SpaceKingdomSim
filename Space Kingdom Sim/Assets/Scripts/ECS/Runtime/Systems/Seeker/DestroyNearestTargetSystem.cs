@@ -25,13 +25,11 @@ public partial struct DestroyNearestTargetSystem : ISystem
         var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-        var translationLookup = SystemAPI.GetComponentLookup<Translation>(true);
         var energyLookup = SystemAPI.GetComponentLookup<Energy>(true);
 
         state.Dependency = new DestroyNearestTargetJob
         {
             ecb = ecb.AsParallelWriter(),
-            translationLookup = translationLookup,
             energyLookup = energyLookup
 
         }.ScheduleParallel(state.Dependency);
@@ -42,22 +40,18 @@ public partial struct DestroyNearestTargetSystem : ISystem
     partial struct DestroyNearestTargetJob : IJobEntity
     {
         [ReadOnly]
-        public ComponentLookup<Translation> translationLookup;
-
-        [ReadOnly]
         public ComponentLookup<Energy> energyLookup;
 
         public EntityCommandBuffer.ParallelWriter ecb;
 
-        public void Execute([ChunkIndexInQuery] int chunkIndex, ref TargetSeekResult seekResult, ref TargetSeekTimer targetSeekTimer, in Energy energy)
+        public void Execute([ChunkIndexInQuery] int chunkIndex, in TargetData targetData, in Energy energy)
         {
-            if (!seekResult.isTargetExist)
+            if (!targetData.isTargetExist)
                 return;
 
-            if (energy.current >= energyLookup[seekResult.target].current)
+            if (energy.current >= energyLookup[targetData.target].current)
             {
-                targetSeekTimer.timer = targetSeekTimer.delayBetweenTargetSearch;
-                ecb.DestroyEntity(chunkIndex, seekResult.target);
+                ecb.DestroyEntity(chunkIndex, targetData.target);
             }
         }
     }

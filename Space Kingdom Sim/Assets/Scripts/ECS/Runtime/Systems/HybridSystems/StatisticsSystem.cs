@@ -1,13 +1,8 @@
 ﻿using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Physics;
+using Unity.Transforms;
 using UnityEngine;
-
-public struct UnitInfo
-{
-    public string target;
-    public string energy;
-    public string distanceToTarget;
-}
 
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 public partial class StatisticsSystem : SystemBase
@@ -23,9 +18,6 @@ public partial class StatisticsSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        var unitInfo = new UnitInfo();
-        unitInfo.target = "";
-
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         var physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
@@ -66,16 +58,25 @@ public partial class StatisticsSystem : SystemBase
 
         var ui = UISingleton.singleton;
         if (!ui) return;
-        ui.MaxLabelCount = 3;
+
         Entities.WithAll<Selected>()
-            .ForEach((Entity e, in TargetSeekResult seekResult, in MovementTarget targetData, in TargetSeekTimer seekTimer) =>
+            .ForEach((Entity e, in TargetData targetData, in MovementTarget movementTarget, in Translation translation) =>
             {
-                ui.SetUnitDebugInfo($"SeekTimer {seekTimer.timer}");
-                ui.SetUnitDebugInfo($"Distance to target {(int)targetData.distanceToTarget}");
-                ui.SetUnitDebugInfo($"In range {EntityManager.IsComponentEnabled<TargetInRange>(e)}");
-                //unitInfo.energy = $"SeekTimer {seekTimer.timer}";
-                //unitInfo.distanceToTarget = $"Distance to target {(int)targetData.distanceToTarget}";
-                //unitInfo.target = $"In range {EntityManager.IsComponentEnabled<TargetInRange>(e)}";// EntityManager.GetName(seekResult.target);
+                ui.ShowUnitDebugInfo(0, $"My pos: {(int3)translation.Value}");
+                ui.ShowUnitDebugInfo(1, $"In range: {EntityManager.IsComponentEnabled<TargetInRange>(e)}");
+                ui.ShowUnitDebugInfo(2, $"Distance to target: {(int)movementTarget.distanceToTarget}");
+
+                var target = "";
+                var targetPos = default(int3);
+
+                if (targetData.isTargetExist)
+                {
+                    target = EntityManager.GetName(targetData.target);
+                    targetPos = (int3)EntityManager.GetComponentData<Translation>(targetData.target).Value;
+                }
+
+                ui.ShowUnitDebugInfo(3, $"Target: {target}");
+                ui.ShowUnitDebugInfo(4, $"Target pos: {targetPos}");
 
             }).WithoutBurst().WithStoreEntityQueryInField(ref selectedQuery).Run();
 

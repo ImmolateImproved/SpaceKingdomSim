@@ -1,5 +1,7 @@
 using Unity.Burst;
 using Unity.Entities;
+using Unity.Physics;
+using Unity.Physics.Aspects;
 using Unity.Transforms;
 
 [BurstCompile]
@@ -35,6 +37,8 @@ public partial struct MovementSystem : ISystem
     [BurstCompile]
     partial struct CalculateVelocityJob : IJobEntity
     {
+        public float dt;
+
         public void Execute(PhysicsBodyAspect physicsBodyAspect)
         {
             physicsBodyAspect.CalculateVelocity();
@@ -47,7 +51,7 @@ public partial struct MovementSystem : ISystem
     {
         public float dt;
 
-        public void Execute(ref Translation translation, in PhysicsData physicsData)
+        public void Execute(ref Translation translation, ref PhysicsData physicsData)
         {
             translation.Value += physicsData.velocity * dt;
         }

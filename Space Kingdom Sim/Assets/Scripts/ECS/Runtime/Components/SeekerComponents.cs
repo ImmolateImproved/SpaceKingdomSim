@@ -1,20 +1,18 @@
 ﻿using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
 
 public struct TargetInRange : IComponentData, IEnableableComponent
 {
 
 }
 
-public struct FollowMouse : IComponentData
-{
-
-}
-
-public struct TargetSeekResult : IComponentData
+public struct TargetData : IComponentData
 {
     public Entity target;
+    public float distanceToTarget;
     public float targetType;
     public bool isTargetExist;
 }
@@ -32,12 +30,8 @@ public struct TargetSeeker : IComponentData
 {
     public float searchRadius;
     public float stopRange;
-}
 
-public struct TargetSeekTimer : IComponentData
-{
-    public float timer;
-    public float delayBetweenTargetSearch;
+    public CollisionFilter targetLayer;
 }
 
 public struct UnitType : IComponentData
@@ -45,53 +39,10 @@ public struct UnitType : IComponentData
     public float value;
 }
 
-[System.Serializable]
-public struct InitialSeekerStats : IComponentData
-{
-    public Range attarctionFroce;
-    public Range repultionForce;
-    public Range maxSpeed;
-    public Range maxForce;
-    public Range foodSearchRadius;
-    public Range poisonSearchRadius;
-
-    public Unity.Mathematics.Random random;
-
-    public float GetAttractionForce()
-    {
-        return random.NextFloat(attarctionFroce.min, attarctionFroce.max);
-    }
-
-    public float GetRepultionForce()
-    {
-        return random.NextFloat(repultionForce.min, repultionForce.max);
-    }
-
-    public float GetMaxSpeed()
-    {
-        return random.NextFloat(maxSpeed.min, maxSpeed.max);
-    }
-
-    public float GetMaxForce()
-    {
-        return random.NextFloat(maxForce.min, maxForce.max);
-    }
-
-    public float GetFoodSearchRadius()
-    {
-        return random.NextFloat(foodSearchRadius.min, foodSearchRadius.max);
-    }
-
-    public float GetPoisonSearchRadius()
-    {
-        return random.NextFloat(poisonSearchRadius.min, poisonSearchRadius.max);
-    }
-}
-
 public readonly partial struct TargetDataAspect : IAspect
 {
-    readonly RefRW<TargetSeekResult> seek;
-    readonly RefRW<MovementTarget> targetData;
+    readonly RefRW<TargetData> targetData;
+    readonly RefRW<MovementTarget> movementTarget;
     readonly RefRO<TargetSeeker> targetSeeker;
     readonly RefRO<SteeringAgent> steeringAgent;
     readonly RefRO<Translation> translation;
@@ -100,7 +51,9 @@ public readonly partial struct TargetDataAspect : IAspect
 
     private float PredictionAmount => steeringAgent.ValueRO.predictionAmount;
 
-    public Entity Target => seek.ValueRO.target;
+    public float3 Position => translation.ValueRO.Value;
+
+    public Entity Target => targetData.ValueRO.target;
 
     public bool TargetInRange
     {
@@ -110,24 +63,26 @@ public readonly partial struct TargetDataAspect : IAspect
 
     public bool IsTargetExist
     {
-        get => seek.ValueRO.isTargetExist;
-        set => seek.ValueRW.isTargetExist = value;
+        get => targetData.ValueRO.isTargetExist;
+        set => targetData.ValueRW.isTargetExist = value;
     }
 
-    public bool IsTargetPositionValid
+    public ref bool IsTargetPositionValid => ref movementTarget.ValueRW.isTargetPositionValid;
+
+    public void Update(float3 targetPos)
     {
-        get => targetData.ValueRO.isTargetPositionValid;
-        set => targetData.ValueRW.isTargetPositionValid = value;
+        movementTarget.ValueRW.targetPosition = targetPos;
+        movementTarget.ValueRW.distanceToTarget = math.distance(translation.ValueRO.Value, targetPos);
+
+        var targetInRange = movementTarget.ValueRO.distanceToTarget <= targetSeeker.ValueRO.stopRange;
+
+        TargetInRange = targetInRange;
     }
 
     public void Update(float3 targetPos, float3 targetDirection)
     {
         targetPos += targetDirection * PredictionAmount;
-        targetData.ValueRW.targetPosition = targetPos;
-        targetData.ValueRW.distanceToTarget = math.distance(translation.ValueRO.Value, targetPos);
 
-        var targetInRange = targetData.ValueRO.distanceToTarget <= targetSeeker.ValueRO.stopRange;
-
-        TargetInRange = targetInRange;
+        Update(targetPos);
     }
 }

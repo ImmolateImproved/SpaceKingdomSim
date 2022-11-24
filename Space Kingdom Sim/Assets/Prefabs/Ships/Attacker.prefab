@@ -44,6 +44,10 @@ PrefabInstance:
       propertyPath: m_PrimitiveCenter.z
       value: -2.0071173
       objectReference: {fileID: 0}
+    - target: {fileID: -5908889061517203361, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
+      propertyPath: m_Material.m_CollidesWithCategories.m_Value.Category00
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2838231049997410975, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -102,7 +106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: followMouse
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: initialVelocity.x
@@ -122,11 +126,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: delayBetweenTargetSearch
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: seekerData.attractionForce
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
+      propertyPath: seekerData.belongsTo.Category00
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
+      propertyPath: seekerData.collidesWith.Category01
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
+      propertyPath: seekerData.collidesWith.Category02
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

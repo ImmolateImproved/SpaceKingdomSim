@@ -6,7 +6,7 @@ using UnityEngine;
 [BurstCompile]
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 [UpdateBefore(typeof(SpawnerSystem))]
-public partial struct SeekerSpawnerSpawnerSystem : ISystem
+public partial struct SeekerSpawnerSystem : ISystem
 {
     public void OnCreate(ref SystemState state)
     {
