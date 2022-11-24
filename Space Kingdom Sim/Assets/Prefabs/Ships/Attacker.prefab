@@ -106,7 +106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: followMouse
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: initialVelocity.x

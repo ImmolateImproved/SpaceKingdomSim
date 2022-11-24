@@ -41,31 +41,48 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
     public void Steer(float3 targetPosition, float attractionForce)
     {
-        var directionToTarget = targetPosition - Position;
+        var desiredDirection = GetDesiredDirection(targetPosition, out var targetIsBehind);
 
-        var slowRaius = SlowRadius;
+        var slowRaius = targetIsBehind ? 0 : SlowRadius;
 
-        var targetIsBehind = math.dot(ltw.ValueRO.Forward, directionToTarget) < 0;
+        var distanceToTarget = math.length(desiredDirection);
+        var desiredSpeed = GetDesiredSpeed(slowRaius, distanceToTarget);
 
-        if (targetIsBehind)
-        {
-            var horizontalDirection = MathUtils.HorizontalDirectionToTarget(ltw.ValueRO.Right, directionToTarget);
-            directionToTarget = ltw.ValueRO.Right * horizontalDirection;
-            slowRaius = 0;
-        }
-
-        var distanceToTarget = math.length(directionToTarget);
-
-        var desiredSpeed = distanceToTarget > slowRaius
-        ? physicsBodyAspect.MaxSpeed
-        : math.remap(0, slowRaius, 0, physicsBodyAspect.MaxSpeed, distanceToTarget);
-
-        var desiredVelocity = MathUtils.SetMagnitude(directionToTarget, desiredSpeed);
+        var desiredVelocity = MathUtils.SetMagnitude(desiredDirection, desiredSpeed);
 
         var steeringForce = desiredVelocity - physicsBodyAspect.Velocity;
 
         steeringForce = MathUtils.ClampMagnitude(steeringForce, MaxForce);
 
         physicsBodyAspect.ResultantForce += steeringForce * attractionForce;
+    }
+
+    private float3 GetDesiredDirection(float3 targetPosition, out bool targetIsBehind)
+    {
+        var desiredDirection = targetPosition - Position;
+
+        targetIsBehind = math.dot(ltw.ValueRO.Forward, desiredDirection) < 0;
+
+        var directionWhenTargetIsBehind = DirectionWhenTargetIsBehind(ltw.ValueRO.Right, desiredDirection);
+
+        desiredDirection = targetIsBehind
+            ? directionWhenTargetIsBehind
+            : desiredDirection;
+
+        return desiredDirection;
+
+        static float3 DirectionWhenTargetIsBehind(float3 right, float3 desiredDirection)
+        {
+            var horizontalDirection = MathUtils.HorizontalDirectionToTarget(right, desiredDirection);
+
+            return right * horizontalDirection;
+        }
+    }
+
+    private float GetDesiredSpeed(float slowRaius, float distanceToTarget)
+    {
+        return distanceToTarget > slowRaius
+            ? physicsBodyAspect.MaxSpeed
+            : math.remap(0, slowRaius, 0, physicsBodyAspect.MaxSpeed, distanceToTarget);
     }
 }
