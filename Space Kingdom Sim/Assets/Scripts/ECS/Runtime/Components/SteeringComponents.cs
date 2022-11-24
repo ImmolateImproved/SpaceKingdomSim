@@ -41,25 +41,26 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
     public void Steer(float3 targetPosition, float attractionForce)
     {
-        var targetOffset = targetPosition - Position;
+        var directionToTarget = targetPosition - Position;
 
         var slowRaius = SlowRadius;
 
-        var targetIsBehind = math.dot(ltw.ValueRO.Forward, targetOffset) < 0;
+        var targetIsBehind = math.dot(ltw.ValueRO.Forward, directionToTarget) < 0;
 
         if (targetIsBehind)
         {
-            targetOffset = MathUtils.DirectionToTarget(ltw.ValueRO.Right, targetOffset);
+            var horizontalDirection = MathUtils.HorizontalDirectionToTarget(ltw.ValueRO.Right, directionToTarget);
+            directionToTarget = ltw.ValueRO.Right * horizontalDirection;
             slowRaius = 0;
         }
 
-        var distanceToTarget = math.length(targetOffset);
+        var distanceToTarget = math.length(directionToTarget);
 
         var desiredSpeed = distanceToTarget > slowRaius
         ? physicsBodyAspect.MaxSpeed
         : math.remap(0, slowRaius, 0, physicsBodyAspect.MaxSpeed, distanceToTarget);
 
-        var desiredVelocity = MathUtils.SetMagnitude(targetOffset, desiredSpeed);
+        var desiredVelocity = MathUtils.SetMagnitude(directionToTarget, desiredSpeed);
 
         var steeringForce = desiredVelocity - physicsBodyAspect.Velocity;
 

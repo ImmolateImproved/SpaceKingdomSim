@@ -5,18 +5,11 @@ public static class MathUtils
     /// <summary>
     /// if target is on the right returns 1, else -1.
     /// </summary>
-    public static int TargetIsOnRight(float3 right, float3 directionToTarget)
+    public static float HorizontalDirectionToTarget(float3 right, float3 directionToTarget)
     {
         var dot = math.dot(right, directionToTarget);
 
-        return dot >= 0 ? 1 : -1;
-    }
-
-    public static float3 DirectionToTarget(float3 right, float3 directionToTarget)
-    {
-        var targetDir = TargetIsOnRight(right, directionToTarget);
-
-        return right * targetDir;
+        return dot >= 0 ? 1f : -1f;
     }
 
     public static float3 SetMagnitude(float3 vector, float length)
