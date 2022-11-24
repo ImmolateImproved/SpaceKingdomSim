@@ -31,7 +31,6 @@ public readonly partial struct SteeringAgentAspect : IAspect
     readonly RefRO<LocalToWorld> ltw;
 
     public float3 Position => ltw.ValueRO.Position;
-    public quaternion Rotation => ltw.ValueRO.Rotation;
 
     public float AttractionForce => steeringAgent.ValueRO.attractionForce;
     public float AdditionalAttraction => steeringAgent.ValueRO.additionalAttraction;
@@ -42,26 +41,25 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
     public void Steer(float3 targetPosition, float attractionForce)
     {
-        var desiredVelocity = targetPosition - Position;
+        var targetOffset = targetPosition - Position;
 
         var slowRaius = SlowRadius;
 
-        var targetIsBehind = math.dot(ltw.ValueRO.Forward, desiredVelocity) < 0;
+        var targetIsBehind = math.dot(ltw.ValueRO.Forward, targetOffset) < 0;
 
         if (targetIsBehind)
         {
-            var targetDir = Mathf.Sign(math.dot(ltw.ValueRO.Right, desiredVelocity));
-            desiredVelocity = math.mul(Rotation, new float3(targetDir, 0, 0));
+            targetOffset = MathUtils.DirectionToTarget(ltw.ValueRO.Right, targetOffset);
             slowRaius = 0;
         }
 
-        var distanceToTarget = math.length(desiredVelocity);
+        var distanceToTarget = math.length(targetOffset);
 
         var desiredSpeed = distanceToTarget > slowRaius
         ? physicsBodyAspect.MaxSpeed
         : math.remap(0, slowRaius, 0, physicsBodyAspect.MaxSpeed, distanceToTarget);
 
-        desiredVelocity = MathUtils.SetMagnitude(desiredVelocity, desiredSpeed);
+        var desiredVelocity = MathUtils.SetMagnitude(targetOffset, desiredSpeed);
 
         var steeringForce = desiredVelocity - physicsBodyAspect.Velocity;
 
