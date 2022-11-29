@@ -29,9 +29,11 @@ public readonly partial struct SteeringAgentAspect : IAspect
 {
     readonly PhysicsBodyAspect physicsBodyAspect;
     readonly RefRO<SteeringAgent> steeringAgent;
-    readonly RefRO<LocalToWorld> ltw;
+    readonly RefRO<LocalTransform> transform;
 
-    public float3 Position => ltw.ValueRO.Position;
+    public float3 Position => transform.ValueRO.Position;
+    public float3 Forward => transform.ValueRO.Forward();
+    public float3 Right => transform.ValueRO.Right();
 
     public float AttractionForce => steeringAgent.ValueRO.attractionForce;
     public float AdditionalAttraction => steeringAgent.ValueRO.additionalAttraction;
@@ -48,7 +50,7 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
         var distanceToTarget = math.length(desiredDirection);
         var desiredSpeed = GetDesiredSpeed(slowRaius, distanceToTarget);
-
+        
         var desiredVelocity = MathUtils.SetMagnitude(desiredDirection, desiredSpeed);
 
         var steeringForce = desiredVelocity - physicsBodyAspect.Velocity;
@@ -62,12 +64,14 @@ public readonly partial struct SteeringAgentAspect : IAspect
     {
         var desiredDirection = targetPosition - Position;
 
-        targetIsBehind = math.dot(ltw.ValueRO.Forward, desiredDirection) < 0;
+        targetIsBehind = math.dot(Forward, desiredDirection) < 0;
 
         if (targetIsBehind)
         {
-            var horizontalDirection = MathUtils.HorizontalDirectionToTarget(ltw.ValueRO.Right, desiredDirection);
-            desiredDirection = ltw.ValueRO.Right * horizontalDirection;
+            var right = Right;
+
+            var horizontalDirection = MathUtils.HorizontalDirectionToTarget(right, desiredDirection);
+            desiredDirection = right * horizontalDirection;
         }
 
         return desiredDirection;

@@ -24,21 +24,23 @@ public partial struct UpdateTargetDataSystem : ISystem
     {
         var localTransfrom = SystemAPI.GetComponentLookup<LocalTransform>(true);
 
-        var mousePos = SystemAPI.GetSingleton<MousePosition>().value;
-
         new UpdateTargetDataJob
         {
             localTransfromLookup = localTransfrom
 
         }.ScheduleParallel();
 
-        new SetTargetToMousePosition
+        if (SystemAPI.TryGetSingleton<MousePosition>(out var mousePos))
         {
-            mousePos = mousePos
+            new SetTargetToMousePosition
+            {
+                mousePos = mousePos.value
 
-        }.ScheduleParallel();
+            }.ScheduleParallel();
+        }
 
-        var outOfBoundSteeringData = SystemAPI.GetSingleton<OutOfBoundSteering>();
+        if (!SystemAPI.TryGetSingleton<OutOfBoundSteering>(out var outOfBoundSteeringData))
+            return;
 
         new OutOfBoundsJob
         {

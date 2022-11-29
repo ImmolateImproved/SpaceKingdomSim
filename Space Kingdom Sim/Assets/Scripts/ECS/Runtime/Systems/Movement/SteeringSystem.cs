@@ -34,7 +34,7 @@ public partial struct SteeringSystem : ISystem
             if (!targetData.isTargetPositionValid)
                 return;
 
-            var missingHpFraction = 1f - (health.current / health.max);
+            //var missingHpFraction = 1f - (health.current / health.max);
 
             var attractionForce = 1;// steeringAspect.AttractionForce + (missingHpFraction * steeringAspect.AdditionalAttraction);
             steeringAspect.Steer(targetData.targetPosition, attractionForce);
