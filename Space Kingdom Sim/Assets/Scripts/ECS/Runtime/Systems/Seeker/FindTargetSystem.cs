@@ -46,13 +46,13 @@ public partial struct FindTargetSystem : ISystem
         [ReadOnly]
         public ComponentLookup<InactiveState> inactiveStateLookup;
 
-        public void Execute(Entity e, in Translation translation, in TargetSeeker seeker, ref TargetData targetData)
+        public void Execute(Entity e, in LocalTransform transfrom, in TargetSeeker seeker, ref TargetData targetData)
         {
             if (unitTypeLookup.HasComponent(targetData.target)) return;
 
             var input = new PointDistanceInput
             {
-                Position = translation.Value,
+                Position = transfrom.Position,
                 MaxDistance = seeker.searchRadius,
                 Filter = seeker.targetLayer
             };

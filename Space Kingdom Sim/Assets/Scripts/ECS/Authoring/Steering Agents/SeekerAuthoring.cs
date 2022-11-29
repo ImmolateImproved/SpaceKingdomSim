@@ -8,9 +8,6 @@ public struct SeekerData
     public float unitType;
     public float attractionForce;
     public float additionalAttraction;
-    public float slowRadius;
-    [Min(1f)]
-    public float stopRange;
     public float predictionAmount;
     public float searchRadius;
     public PhysicsCategoryTags belongsTo;
@@ -24,6 +21,10 @@ public class SeekerAuthoring : MonoBehaviour
     public float maxSpeed;
 
     public float maxForce;
+
+    public float slowRadius;
+    [Min(1f)]
+    public float stopRange = 1;
 
     public SeekerData seekerData;
 
@@ -46,11 +47,12 @@ public class SeekerAuthoring : MonoBehaviour
 
             AddComponent(new SteeringAgent
             {
+                maxForce = authoring.maxForce,
+                stopRange = authoring.stopRange,
+                slowRadius = authoring.slowRadius,
                 attractionForce = seekerData.attractionForce,
                 additionalAttraction = seekerData.additionalAttraction,
-                predictionAmount = seekerData.predictionAmount,
-                maxForce = authoring.maxForce,
-                slowRadius = seekerData.slowRadius
+                predictionAmount = seekerData.predictionAmount
             });
 
             AddComponent(new UnitType { value = seekerData.unitType });
@@ -58,7 +60,6 @@ public class SeekerAuthoring : MonoBehaviour
             AddComponent(new TargetSeeker
             {
                 searchRadius = seekerData.searchRadius,
-                stopRange = seekerData.stopRange,
 
                 targetLayer = new Unity.Physics.CollisionFilter
                 {

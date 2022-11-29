@@ -29,7 +29,6 @@ public struct MovementTarget : IComponentData
 public struct TargetSeeker : IComponentData
 {
     public float searchRadius;
-    public float stopRange;
 
     public CollisionFilter targetLayer;
 }
@@ -43,15 +42,14 @@ public readonly partial struct TargetDataAspect : IAspect
 {
     readonly RefRW<TargetData> targetData;
     readonly RefRW<MovementTarget> movementTarget;
-    readonly RefRO<TargetSeeker> targetSeeker;
     readonly RefRO<SteeringAgent> steeringAgent;
-    readonly RefRO<Translation> translation;
+    readonly RefRO<LocalTransform> transfrom;
 
     readonly EnabledRefRW<TargetInRange> enabledRefRW;
 
     private float PredictionAmount => steeringAgent.ValueRO.predictionAmount;
 
-    public float3 Position => translation.ValueRO.Value;
+    public float3 Position => transfrom.ValueRO.Position;
 
     public Entity Target => targetData.ValueRO.target;
 
@@ -72,9 +70,9 @@ public readonly partial struct TargetDataAspect : IAspect
     public void Update(float3 targetPos)
     {
         movementTarget.ValueRW.targetPosition = targetPos;
-        movementTarget.ValueRW.distanceToTarget = math.distance(translation.ValueRO.Value, targetPos);
+        movementTarget.ValueRW.distanceToTarget = math.distance(Position, targetPos);
 
-        var targetInRange = movementTarget.ValueRO.distanceToTarget <= targetSeeker.ValueRO.stopRange;
+        var targetInRange = movementTarget.ValueRO.distanceToTarget <= steeringAgent.ValueRO.stopRange;
 
         TargetInRange = targetInRange;
     }

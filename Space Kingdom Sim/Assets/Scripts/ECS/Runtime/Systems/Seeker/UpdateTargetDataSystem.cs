@@ -22,18 +22,13 @@ public partial struct UpdateTargetDataSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        var ltwLookup = SystemAPI.GetComponentLookup<LocalToWorld>(true);
-
-        var translationLookup = SystemAPI.GetComponentLookup<Translation>(true);
-        var rotationLookup = SystemAPI.GetComponentLookup<Rotation>(true);
+        var localTransfrom = SystemAPI.GetComponentLookup<LocalTransform>(true);
 
         var mousePos = SystemAPI.GetSingleton<MousePosition>().value;
 
         new UpdateTargetDataJob
         {
-            ltwLookup = ltwLookup,
-            translationLookup = translationLookup,
-            rotationLookup = rotationLookup
+            localTransfromLookup = localTransfrom
 
         }.ScheduleParallel();
 
@@ -54,21 +49,15 @@ public partial struct UpdateTargetDataSystem : ISystem
 
     [BurstCompile]
     [WithNone(typeof(FollowMouse))]
-    [WithEntityQueryOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
+    [WithOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
     partial struct UpdateTargetDataJob : IJobEntity
     {
         [ReadOnly]
-        public ComponentLookup<LocalToWorld> ltwLookup;
-
-        [ReadOnly]
-        public ComponentLookup<Translation> translationLookup;
-
-        [ReadOnly]
-        public ComponentLookup<Rotation> rotationLookup;
+        public ComponentLookup<LocalTransform> localTransfromLookup;
 
         public void Execute(TargetDataAspect targetDataAspect)
         {
-            targetDataAspect.IsTargetExist = ltwLookup.HasComponent(targetDataAspect.Target);
+            targetDataAspect.IsTargetExist = localTransfromLookup.HasComponent(targetDataAspect.Target);
             targetDataAspect.IsTargetPositionValid = targetDataAspect.IsTargetExist;
 
             if (!targetDataAspect.IsTargetExist)
@@ -77,8 +66,8 @@ public partial struct UpdateTargetDataSystem : ISystem
                 return;
             }
 
-            var targetPos = translationLookup[targetDataAspect.Target].Value;//ltwLookup[targetDataAspect.Target].Position;
-            var targetDirection = ltwLookup[targetDataAspect.Target].Forward;// rotationLookup[targetDataAspect.Target].Value;
+            var targetPos = localTransfromLookup[targetDataAspect.Target].Position;
+            var targetDirection = localTransfromLookup[targetDataAspect.Target].Forward();
 
             targetDataAspect.Update(targetPos, targetDirection);
         }
@@ -86,7 +75,7 @@ public partial struct UpdateTargetDataSystem : ISystem
 
     [BurstCompile]
     [WithAll(typeof(FollowMouse))]
-    [WithEntityQueryOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
+    [WithOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
     partial struct SetTargetToMousePosition : IJobEntity
     {
         public float3 mousePos;
@@ -102,7 +91,7 @@ public partial struct UpdateTargetDataSystem : ISystem
     }
 
     [BurstCompile]
-    [WithEntityQueryOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
+    [WithOptions(EntityQueryOptions.IgnoreComponentEnabledState)]
     partial struct OutOfBoundsJob : IJobEntity
     {
         public OutOfBoundSteering outOfBoundData;

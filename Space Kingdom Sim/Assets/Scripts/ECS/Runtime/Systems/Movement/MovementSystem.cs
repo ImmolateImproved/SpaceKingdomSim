@@ -51,9 +51,9 @@ public partial struct MovementSystem : ISystem
     {
         public float dt;
 
-        public void Execute(ref Translation translation, ref PhysicsData physicsData)
+        public void Execute(TransformAspect transformAspect, ref PhysicsData physicsData)
         {
-            translation.Value += physicsData.velocity * dt;
+            transformAspect.LocalPosition += physicsData.velocity * dt;
         }
     }
 }

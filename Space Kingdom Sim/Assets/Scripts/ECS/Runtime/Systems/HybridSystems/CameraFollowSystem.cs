@@ -25,7 +25,7 @@ public partial class CameraFollowSystem : SystemBase
         {
             ref var cameraFollowRW = ref cameraFollow.ValueRW;
 
-            var currentTargetExists = HasComponent<Translation>(cameraFollowRW.currentTarget);
+            var currentTargetExists = SystemAPI.HasComponent<LocalToWorld>(cameraFollowRW.currentTarget);
 
             var spacePressed = Input.GetKeyDown(KeyCode.Space);
 
@@ -63,9 +63,9 @@ public partial class CameraFollowSystem : SystemBase
             var cameraPos = camera.position;
             var cameraPosY = camera.position.y;
 
-            if (cameraFollow.enabled && HasComponent<Translation>(cameraFollow.currentTarget))
+            if (cameraFollow.enabled && SystemAPI.HasComponent<LocalToWorld>(cameraFollow.currentTarget))
             {
-                cameraPos = GetComponent<Translation>(cameraFollow.currentTarget).Value + cameraFollow.offset;
+                cameraPos = SystemAPI.GetComponent<LocalToWorld>(cameraFollow.currentTarget).Position + cameraFollow.offset;
             }
 
             var dt = SystemAPI.Time.DeltaTime;

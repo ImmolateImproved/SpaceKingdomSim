@@ -60,9 +60,9 @@ public partial class StatisticsSystem : SystemBase
         if (!ui) return;
 
         Entities.WithAll<Selected>()
-            .ForEach((Entity e, in TargetData targetData, in MovementTarget movementTarget, in Translation translation) =>
+            .ForEach((Entity e, in TargetData targetData, in MovementTarget movementTarget, in LocalTransform transform) =>
             {
-                ui.ShowUnitDebugInfo(0, $"My pos: {(int3)translation.Value}");
+                ui.ShowUnitDebugInfo(0, $"My pos: {(int3)transform.Position}");
                 ui.ShowUnitDebugInfo(1, $"In range: {EntityManager.IsComponentEnabled<TargetInRange>(e)}");
                 ui.ShowUnitDebugInfo(2, $"Distance to target: {(int)movementTarget.distanceToTarget}");
 
@@ -72,7 +72,7 @@ public partial class StatisticsSystem : SystemBase
                 if (targetData.isTargetExist)
                 {
                     target = EntityManager.GetName(targetData.target);
-                    targetPos = (int3)EntityManager.GetComponentData<Translation>(targetData.target).Value;
+                    targetPos = (int3)EntityManager.GetComponentData<LocalTransform>(targetData.target).Position;
                 }
 
                 ui.ShowUnitDebugInfo(3, $"Target: {target}");

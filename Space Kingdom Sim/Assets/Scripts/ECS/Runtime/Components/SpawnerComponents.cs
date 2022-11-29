@@ -119,7 +119,8 @@ public readonly partial struct SpawnerAspect : IAspect
         for (int i = 0; i < entities.Length; i++)
         {
             var randomPosition = positionFactory.GetNextSpawnPosition();
-            systemState.EntityManager.SetComponentData(entities[i], new Translation { Value = randomPosition });
+
+            systemState.EntityManager.SetComponentData(entities[i], LocalTransform.FromPosition(randomPosition));
         }
 
         return entities;

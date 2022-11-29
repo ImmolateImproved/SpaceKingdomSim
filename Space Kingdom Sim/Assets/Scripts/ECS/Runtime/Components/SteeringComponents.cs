@@ -20,6 +20,7 @@ public struct SteeringAgent : IComponentData
     public float additionalAttraction;
     public float predictionAmount;
 
+    public float stopRange;
     public float slowRadius;
     public float maxForce;
 }

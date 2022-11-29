@@ -30,7 +30,7 @@ public partial struct RotateTowardsVelocitySystem : ISystem
     {
         public void Execute(TransformAspect transform, in PhysicsData physicsData)
         {
-            transform.LookAt(transform.Position + physicsData.velocity);
+            transform.LookAt(transform.LocalPosition + physicsData.velocity);
         }
     }
 }
