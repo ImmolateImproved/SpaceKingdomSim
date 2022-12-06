@@ -123,23 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &774671337 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1155442436458520181, guid: 2fbb66f186386dc41a0768c8bc8748cd, type: 3}
-  m_PrefabInstance: {fileID: 1069661200}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &774671341
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 774671337}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a502068caac65d4e83c6475d526a6b6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1069661200
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -199,10 +182,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1155442436458520181, guid: 2fbb66f186386dc41a0768c8bc8748cd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 774671341}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2fbb66f186386dc41a0768c8bc8748cd, type: 3}
 --- !u!1001 &1624782930
 PrefabInstance:
@@ -222,11 +202,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1903995339, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: spawnRequests.Array.data[1].count
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1058882951435089218, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: spawnRequests.Array.data[0].count
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1058882951435089219, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: m_IsActive
@@ -235,6 +215,10 @@ PrefabInstance:
     - target: {fileID: 1058882951797723169, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058882951797723170, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: spawnRequests.Array.data[0].count
+      value: 55
       objectReference: {fileID: 0}
     - target: {fileID: 1058882951797723171, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: m_IsActive
@@ -286,11 +270,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1058882952687463801, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: bounds.x
-      value: 25
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058882952687463801, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: bounds.z
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 1058882952687463802, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
       propertyPath: m_Name
-      value: BoundsData
+      value: LevelData
+      objectReference: {fileID: 0}
+    - target: {fileID: 1058882952687463802, guid: e336f8ef4e3971f4b8918f21aca8cb20, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

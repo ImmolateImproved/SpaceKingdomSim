@@ -23,7 +23,7 @@ public partial struct FindTargetSystem : ISystem
         var physicsWorld = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
         var unitTypeLookup = SystemAPI.GetComponentLookup<UnitType>(true);
         var inactiveStateLookup = SystemAPI.GetComponentLookup<InactiveState>(true);
-
+        
         new FindTargetJob
         {
             physicsWorld = physicsWorld,
@@ -46,18 +46,18 @@ public partial struct FindTargetSystem : ISystem
         [ReadOnly]
         public ComponentLookup<InactiveState> inactiveStateLookup;
 
-        public void Execute(Entity e, in LocalTransform transfrom, in TargetSeeker seeker, ref TargetData targetData)
+        public void Execute(Entity e, in LocalTransform transfrom, in PerceptionData perception, ref TargetData targetData)
         {
             if (unitTypeLookup.HasComponent(targetData.target)) return;
-
+            
             var input = new PointDistanceInput
             {
                 Position = transfrom.Position,
-                MaxDistance = seeker.searchRadius,
-                Filter = seeker.targetLayer
+                MaxDistance = perception.searchRadius,
+                Filter = perception.targetLayer
             };
-
-            var collector = new FindTargetCollector(e, seeker.searchRadius, unitTypeLookup, inactiveStateLookup);
+            
+            var collector = new FindTargetCollector(e, perception.searchRadius, unitTypeLookup, inactiveStateLookup);
             physicsWorld.CalculateDistance(input, ref collector);
 
             var result = collector.FindTarget();
@@ -71,7 +71,7 @@ public partial struct FindTargetSystem : ISystem
     {
         public Entity target;
         public float distanceToTarget;
-        public float targetType;
+        public int targetType;
     }
 
     private struct FindTargetCollector : ICollector<DistanceHit>
@@ -111,7 +111,7 @@ public partial struct FindTargetSystem : ISystem
                 || !unitTypeLookup.HasComponent(hit.Entity);
 
             if (ignoreUnit) return false;
-
+            
             var targetSeekResult = new TargetSeekResult
             {
                 target = hit.Entity,

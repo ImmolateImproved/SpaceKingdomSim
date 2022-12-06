@@ -1,9 +1,10 @@
 ﻿using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class UnitAuthoring : MonoBehaviour
 {
-    public float unitType;
+    public int unitType;
 
     class TargetBaker : Baker<UnitAuthoring>
     {

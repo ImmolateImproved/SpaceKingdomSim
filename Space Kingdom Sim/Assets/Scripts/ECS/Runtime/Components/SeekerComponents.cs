@@ -13,11 +13,11 @@ public struct TargetData : IComponentData
 {
     public Entity target;
     public float distanceToTarget;
-    public float targetType;
+    public int targetType;
     public bool isTargetExist;
 }
 
-public struct MovementTarget : IComponentData
+public struct MovementDestination : IComponentData
 {
     public float3 targetPosition;
 
@@ -26,7 +26,7 @@ public struct MovementTarget : IComponentData
     public bool isTargetPositionValid;
 }
 
-public struct TargetSeeker : IComponentData
+public struct PerceptionData : IComponentData
 {
     public float searchRadius;
 
@@ -35,13 +35,13 @@ public struct TargetSeeker : IComponentData
 
 public struct UnitType : IComponentData
 {
-    public float value;
+    public int value;
 }
 
 public readonly partial struct TargetDataAspect : IAspect
 {
     readonly RefRW<TargetData> targetData;
-    readonly RefRW<MovementTarget> movementTarget;
+    readonly RefRW<MovementDestination> movementTarget;
     readonly RefRO<SteeringAgent> steeringAgent;
     readonly RefRO<LocalTransform> transfrom;
 
@@ -67,7 +67,7 @@ public readonly partial struct TargetDataAspect : IAspect
 
     public ref bool IsTargetPositionValid => ref movementTarget.ValueRW.isTargetPositionValid;
 
-    public void Update(float3 targetPos)
+    public void SetTargetPosition(float3 targetPos)
     {
         movementTarget.ValueRW.targetPosition = targetPos;
         movementTarget.ValueRW.distanceToTarget = math.distance(Position, targetPos);
@@ -81,6 +81,6 @@ public readonly partial struct TargetDataAspect : IAspect
     {
         targetPos += targetDirection * PredictionAmount;
 
-        Update(targetPos);
+        SetTargetPosition(targetPos);
     }
 }

@@ -172,6 +172,10 @@ PrefabInstance:
       propertyPath: m_Material.m_CollidesWithCategories.m_Value.Category31
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 181596165724134017, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
+      propertyPath: m_Mass
+      value: 555
+      objectReference: {fileID: 0}
     - target: {fileID: 2838231049997410975, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -226,15 +230,15 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 94665bb7342aebe42bb5af984f5aad5b, type: 2}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: maxForce
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: maxSpeed
-      value: 10
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: slowRadius
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: followMouse
@@ -276,7 +280,8 @@ PrefabInstance:
       propertyPath: seekerData.collidesWith.Category02
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 181596165724134017, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -44,7 +44,7 @@ public partial struct OutOfBoundsSteeringSystem : ISystem
                 targetDataAspect.IsTargetExist = false;
                 targetDataAspect.IsTargetPositionValid = true;
 
-                targetDataAspect.Update(outOfBoundData.squareBounds.center);
+                targetDataAspect.SetTargetPosition(outOfBoundData.squareBounds.center);
             }
         }
     }

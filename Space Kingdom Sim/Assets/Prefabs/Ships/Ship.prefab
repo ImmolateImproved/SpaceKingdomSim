@@ -194,7 +194,7 @@ MonoBehaviour:
   maxSpeed: 8
   maxForce: 1
   slowRadius: 0
-  stopRange: 1
+  stopRange: 4
   seekerData:
     unitType: 100
     attractionForce: 1
@@ -296,15 +296,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94421ddee59a804419c377f661df3ede, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94421ddee59a804419c377f661df3ede, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94421ddee59a804419c377f661df3ede, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 94421ddee59a804419c377f661df3ede, type: 3}
       propertyPath: m_LocalPosition.x

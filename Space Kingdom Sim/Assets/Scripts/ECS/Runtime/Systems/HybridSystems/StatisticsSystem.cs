@@ -13,7 +13,7 @@ public partial class StatisticsSystem : SystemBase
 
     protected override void OnCreate()
     {
-        seekerQuery = GetEntityQuery(typeof(TargetSeeker));
+        seekerQuery = GetEntityQuery(typeof(PerceptionData));
     }
 
     protected override void OnUpdate()
@@ -60,7 +60,7 @@ public partial class StatisticsSystem : SystemBase
         if (!ui) return;
 
         Entities.WithAll<Selected>()
-            .ForEach((Entity e, in TargetData targetData, in MovementTarget movementTarget, in LocalTransform transform) =>
+            .ForEach((Entity e, in TargetData targetData, in MovementDestination movementTarget, in LocalTransform transform) =>
             {
                 ui.ShowUnitDebugInfo(0, $"My pos: {(int3)transform.Position}");
                 ui.ShowUnitDebugInfo(1, $"In range: {EntityManager.IsComponentEnabled<TargetInRange>(e)}");

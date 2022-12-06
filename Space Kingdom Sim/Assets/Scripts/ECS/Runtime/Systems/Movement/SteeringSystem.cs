@@ -29,7 +29,7 @@ public partial struct SteeringSystem : ISystem
     [WithNone(typeof(InactiveState))]
     partial struct SteeringJob : IJobEntity
     {
-        public void Execute(SteeringAgentAspect steeringAspect, in Energy health, in MovementTarget targetData)
+        public void Execute(SteeringAgentAspect steeringAspect, in Energy health, in MovementDestination targetData)
         {
             if (!targetData.isTargetPositionValid)
                 return;

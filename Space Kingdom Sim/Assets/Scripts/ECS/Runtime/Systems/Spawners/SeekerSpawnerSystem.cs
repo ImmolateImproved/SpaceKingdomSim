@@ -21,26 +21,26 @@ public partial struct SeekerSpawnerSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-        foreach (var (spawner, gridPositionFabric, mutationData) in SystemAPI.Query<SpawnerAspect, RefRW<GridPositionFactory>, RefRW<InitialSeekerStats>>().WithNone<SpawnTimer>())
+        var steeringAgentsLookup = SystemAPI.GetComponentLookup<SteeringAgent>();
+        var maxSpeedLookup = SystemAPI.GetComponentLookup<MaxSpeed>();
+
+        foreach (var (spawner, gridPositionFabric, initialStats) in SystemAPI.Query<SpawnerAspect, RefRW<GridPositionFactory>, RefRW<InitialSeekerStats>>().WithNone<SpawnTimer>())
         {
+            ref var stats = ref initialStats.ValueRW;
+
             for (int i = 0; i < spawner.SpawnRequestCount; i++)
             {
                 var seekerEntities = spawner.Spawn(ref state, ref gridPositionFabric.ValueRW, i);
 
                 for (int j = 0; j < seekerEntities.Length; j++)
                 {
-                    var steeringAgent = SystemAPI.GetComponent<SteeringAgent>(seekerEntities[j]);
-                    steeringAgent.maxForce = mutationData.ValueRW.GetMaxForce();
-                    SystemAPI.SetComponent(seekerEntities[j], steeringAgent);
-                    
-                    var maxSpeed = SystemAPI.GetComponent<MaxSpeed>(seekerEntities[j]);
-                    maxSpeed.value = mutationData.ValueRW.GetMaxSpeed();
-                    SystemAPI.SetComponent(seekerEntities[j], maxSpeed);
+                    var seeker = seekerEntities[j];
 
-                    //var foodSeekerData = targetSeekerLookup[seekerEntities[j]];
-                    //foodSeekerData.attractionForce = mutationData.ValueRW.GetAttractionForce();
-                    //foodSeekerData.searchRadius = mutationData.ValueRW.GetFoodSearchRadius();
-                    //SystemAPI.SetComponent(seekerEntities[j], foodSeekerData);
+                    ref var steeringAgent = ref steeringAgentsLookup.GetRefRW(seeker, false).ValueRW;
+                    steeringAgent.maxForce = stats.GetMaxForce();
+
+                    ref var maxSpeed = ref maxSpeedLookup.GetRefRW(seeker, false).ValueRW;
+                    maxSpeed.value = stats.GetMaxSpeed();
                 }
             }
 

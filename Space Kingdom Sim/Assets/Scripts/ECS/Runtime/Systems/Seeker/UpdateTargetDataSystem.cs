@@ -88,7 +88,7 @@ public partial struct UpdateTargetDataSystem : ISystem
             targetDataAspect.IsTargetPositionValid = true;
 
             mousePos.y = 0;
-            targetDataAspect.Update(mousePos);
+            targetDataAspect.SetTargetPosition(mousePos);
         }
     }
 
@@ -105,7 +105,7 @@ public partial struct UpdateTargetDataSystem : ISystem
                 targetDataAspect.IsTargetExist = false;
                 targetDataAspect.IsTargetPositionValid = true;
 
-                targetDataAspect.Update(outOfBoundData.squareBounds.center);
+                targetDataAspect.SetTargetPosition(outOfBoundData.squareBounds.center);
             }
         }
     }

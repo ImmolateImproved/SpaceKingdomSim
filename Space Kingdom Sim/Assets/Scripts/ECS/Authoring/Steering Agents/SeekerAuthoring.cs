@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public struct SeekerData
 {
-    public float unitType;
+    public int unitType;
     public float attractionForce;
     public float additionalAttraction;
     public float predictionAmount;
@@ -36,7 +36,7 @@ public class SeekerAuthoring : MonoBehaviour
             AddComponent(new TargetInRange());
             AddComponent(new TargetData());
             AddComponent(new PhysicsData());
-            AddComponent(new MovementTarget());
+            AddComponent(new MovementDestination());
 
             AddComponent(new MaxSpeed
             {
@@ -57,7 +57,7 @@ public class SeekerAuthoring : MonoBehaviour
 
             AddComponent(new UnitType { value = seekerData.unitType });
 
-            AddComponent(new TargetSeeker
+            AddComponent(new PerceptionData
             {
                 searchRadius = seekerData.searchRadius,
 
