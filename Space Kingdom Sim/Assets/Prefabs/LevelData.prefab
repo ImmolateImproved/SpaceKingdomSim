@@ -47,9 +47,9 @@ MonoBehaviour:
   boundsData: {fileID: 1058882952687463801}
   spawnRequests:
   - prefab: {fileID: 7537620824612499801, guid: f4e00f5149fb9154596266d935680d52, type: 3}
-    count: 0
+    count: 25
   - prefab: {fileID: 7537620824612499801, guid: d25d49fef0e806341856668e239d00f6, type: 3}
-    count: 5
+    count: 150
   timeBetweenSpawns: 0
 --- !u!1 &1058882951435089219
 GameObject:
@@ -98,7 +98,7 @@ MonoBehaviour:
   boundsData: {fileID: 1058882952687463801}
   spawnRequests:
   - prefab: {fileID: 6318504723000294576, guid: 72ca5d1ed09d91e489c80c94691218bc, type: 3}
-    count: 1
+    count: 155
   timeBetweenSpawns: 1
 --- !u!1 &1058882951797723171
 GameObject:
@@ -147,7 +147,7 @@ MonoBehaviour:
   boundsData: {fileID: 1058882952687463801}
   spawnRequests:
   - prefab: {fileID: 6318504723000294576, guid: 72ca5d1ed09d91e489c80c94691218bc, type: 3}
-    count: 55
+    count: 10000
   timeBetweenSpawns: 0
 --- !u!1 &1058882952687463802
 GameObject:
@@ -160,6 +160,7 @@ GameObject:
   - component: {fileID: 1058882952687463800}
   - component: {fileID: 1058882952687463801}
   - component: {fileID: 780767605529816638}
+  - component: {fileID: 4999687411312925613}
   m_Layer: 0
   m_Name: LevelData
   m_TagString: Untagged
@@ -183,7 +184,7 @@ Transform:
   - {fileID: 1903995338}
   - {fileID: 1058882951435089217}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1058882952687463801
 MonoBehaviour:
@@ -198,7 +199,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boundsType: 0
-  bounds: {x: 25, y: 0, z: 25}
+  bounds: {x: 1000, y: 0, z: 1000}
   maxRadius: 50
 --- !u!114 &780767605529816638
 MonoBehaviour:
@@ -212,5 +213,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2563b76b19982864bac78a217d3c83db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boundsData: {fileID: 1058882952687463801}
+  boundsData: {fileID: 4999687411312925613}
   steeringForce: 1
+--- !u!114 &4999687411312925613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058882952687463802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 342d664014fff694f838ca61635c39e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boundsType: 0
+  bounds: {x: 1000, y: 15, z: 1000}
+  maxRadius: 0

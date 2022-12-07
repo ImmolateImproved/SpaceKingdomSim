@@ -22,7 +22,6 @@ public partial struct SeekerSpawnerSystem : ISystem
     public void OnUpdate(ref SystemState state)
     {
         var steeringAgentsLookup = SystemAPI.GetComponentLookup<SteeringAgent>();
-        var maxSpeedLookup = SystemAPI.GetComponentLookup<MaxSpeed>();
 
         foreach (var (spawner, gridPositionFabric, initialStats) in SystemAPI.Query<SpawnerAspect, RefRW<GridPositionFactory>, RefRW<InitialSeekerStats>>().WithNone<SpawnTimer>())
         {
@@ -38,9 +37,6 @@ public partial struct SeekerSpawnerSystem : ISystem
 
                     ref var steeringAgent = ref steeringAgentsLookup.GetRefRW(seeker, false).ValueRW;
                     steeringAgent.maxForce = stats.GetMaxForce();
-
-                    ref var maxSpeed = ref maxSpeedLookup.GetRefRW(seeker, false).ValueRW;
-                    maxSpeed.value = stats.GetMaxSpeed();
                 }
             }
 

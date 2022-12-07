@@ -35,19 +35,14 @@ public class SeekerAuthoring : MonoBehaviour
             AddComponent(new InactiveState());
             AddComponent(new TargetInRange());
             AddComponent(new TargetData());
-            AddComponent(new PhysicsData());
             AddComponent(new MovementDestination());
-
-            AddComponent(new MaxSpeed
-            {
-                value = authoring.maxSpeed
-            });
 
             var seekerData = authoring.seekerData;
 
             AddComponent(new SteeringAgent
             {
                 maxForce = authoring.maxForce,
+                maxSpeed = authoring.maxSpeed,
                 stopRange = authoring.stopRange,
                 slowRadius = authoring.slowRadius,
                 attractionForce = seekerData.attractionForce,

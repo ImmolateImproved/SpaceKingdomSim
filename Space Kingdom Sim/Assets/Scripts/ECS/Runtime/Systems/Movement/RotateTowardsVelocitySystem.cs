@@ -1,9 +1,9 @@
 ﻿using Unity.Burst;
 using Unity.Entities;
+using Unity.Physics;
 using Unity.Transforms;
 
 [BurstCompile]
-[UpdateAfter(typeof(MovementSystem))]
 public partial struct RotateTowardsVelocitySystem : ISystem
 {
     public void OnCreate(ref SystemState state)
@@ -28,9 +28,9 @@ public partial struct RotateTowardsVelocitySystem : ISystem
     [BurstCompile]
     partial struct RotateTowardsVelocityJob : IJobEntity
     {
-        public void Execute(TransformAspect transform, in PhysicsData physicsData)
+        public void Execute(TransformAspect transform, in PhysicsVelocity physicsVelocity)
         {
-            transform.LookAt(transform.LocalPosition + physicsData.velocity);
+            transform.LookAt(transform.LocalPosition + physicsVelocity.Linear);
         }
     }
 }

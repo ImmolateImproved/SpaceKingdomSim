@@ -230,7 +230,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 94665bb7342aebe42bb5af984f5aad5b, type: 2}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: maxForce
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: maxSpeed
@@ -238,7 +238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: slowRadius
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: followMouse
@@ -258,7 +258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: seekerData.searchRadius
-      value: 100
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: delayBetweenTargetSearch

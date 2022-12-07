@@ -1,8 +1,7 @@
-﻿using System;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Transforms;
-using UnityEngine;
 
 public struct FollowMouse : IComponentData
 {
@@ -23,11 +22,12 @@ public struct SteeringAgent : IComponentData
     public float stopRange;
     public float slowRadius;
     public float maxForce;
+    public float maxSpeed;
 }
 
 public readonly partial struct SteeringAgentAspect : IAspect
 {
-    readonly PhysicsBodyAspect physicsBodyAspect;
+    readonly RefRW<PhysicsVelocity> velocity;
     readonly RefRO<SteeringAgent> steeringAgent;
     readonly RefRO<LocalTransform> transform;
 
@@ -37,6 +37,8 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
     public float AttractionForce => steeringAgent.ValueRO.attractionForce;
     public float AdditionalAttraction => steeringAgent.ValueRO.additionalAttraction;
+
+    public float MaxSpeed => steeringAgent.ValueRO.maxSpeed;
 
     public float MaxForce => steeringAgent.ValueRO.maxForce;
 
@@ -50,14 +52,14 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
         var distanceToTarget = math.length(desiredDirection);
         var desiredSpeed = GetDesiredSpeed(slowRaius, distanceToTarget);
-        
+
         var desiredVelocity = MathUtils.SetMagnitude(desiredDirection, desiredSpeed);
 
-        var steeringForce = desiredVelocity - physicsBodyAspect.Velocity;
+        var steeringForce = desiredVelocity - velocity.ValueRO.Linear;
 
         steeringForce = MathUtils.ClampMagnitude(steeringForce, MaxForce);
 
-        physicsBodyAspect.ResultantForce += steeringForce * attractionForce;
+        velocity.ValueRW.Linear += steeringForce * attractionForce;
     }
 
     private float3 GetDesiredDirection(float3 targetPosition, out bool targetIsBehind)
@@ -80,7 +82,7 @@ public readonly partial struct SteeringAgentAspect : IAspect
     private float GetDesiredSpeed(float slowRaius, float distanceToTarget)
     {
         return distanceToTarget > slowRaius
-            ? physicsBodyAspect.MaxSpeed
-            : math.remap(0, slowRaius, 0, physicsBodyAspect.MaxSpeed, distanceToTarget);
+            ? MaxSpeed
+            : math.remap(0, slowRaius, 0, MaxSpeed, distanceToTarget);
     }
 }

@@ -2,7 +2,6 @@ using Unity.Burst;
 using Unity.Entities;
 
 [BurstCompile]
-[UpdateBefore(typeof(MovementSystem))]
 [UpdateAfter(typeof(UpdateTargetDataSystem))]
 public partial struct SteeringSystem : ISystem
 {
@@ -29,7 +28,7 @@ public partial struct SteeringSystem : ISystem
     [WithNone(typeof(InactiveState))]
     partial struct SteeringJob : IJobEntity
     {
-        public void Execute(SteeringAgentAspect steeringAspect, in Energy health, in MovementDestination targetData)
+        public void Execute(SteeringAgentAspect steeringAspect, in MovementDestination targetData)
         {
             if (!targetData.isTargetPositionValid)
                 return;
