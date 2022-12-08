@@ -21,7 +21,7 @@ public class WaypointsAuthoring : MonoBehaviour
             for (int i = 0; i < authoring.waypoints.Length; i++)
             {
                 DependsOn(authoring.waypoints[i]);
-
+                
                 buffer.Add(new Waypoint
                 {
                     position = authoring.waypoints[i].position

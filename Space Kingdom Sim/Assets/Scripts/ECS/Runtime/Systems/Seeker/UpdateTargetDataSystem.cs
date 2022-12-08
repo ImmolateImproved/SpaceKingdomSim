@@ -71,7 +71,7 @@ public partial struct UpdateTargetDataSystem : ISystem
             var targetPos = localTransfromLookup[targetDataAspect.Target].Position;
             var targetDirection = localTransfromLookup[targetDataAspect.Target].Forward();
 
-            targetDataAspect.Update(targetPos, targetDirection);
+            targetDataAspect.SetTargetPosition(targetPos, targetDirection);
         }
     }
 

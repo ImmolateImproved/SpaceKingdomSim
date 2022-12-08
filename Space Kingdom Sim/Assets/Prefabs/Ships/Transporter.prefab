@@ -237,12 +237,12 @@ PrefabInstance:
       value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
-      propertyPath: slowRadius
-      value: 8
+      propertyPath: stopRange
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
-      propertyPath: followMouse
-      value: 0
+      propertyPath: slowRadius
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 5536588154481441123, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: seekerData.unitType

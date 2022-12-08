@@ -12,6 +12,8 @@ public class UISingleton : MonoBehaviour
 
     private List<Label> labels = new List<Label>();
 
+    private int currentIndex;
+
     private void Awake()
     {
         singleton = this;
@@ -21,11 +23,23 @@ public class UISingleton : MonoBehaviour
         parent = root.Q<VisualElement>("StatisticsPanel");
     }
 
-    public void ShowUnitDebugInfo(int index, string unitInfo)
+    private void LateUpdate()
     {
-        if (labels.Count > index)
+        Reset();
+    }
+
+    private void Reset()
+    {
+        currentIndex = 0;
+    }
+
+    public void AddLabel(string unitInfo)
+    {
+        currentIndex++;
+
+        if (labels.Count > currentIndex)
         {
-            labels[index].text = unitInfo;
+            labels[currentIndex].text = unitInfo;
             return;
         }
 

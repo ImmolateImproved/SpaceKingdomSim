@@ -1,7 +1,5 @@
 ﻿using Unity.Burst;
 using Unity.Entities;
-using UnityEditor.PackageManager;
-using UnityEngine;
 
 [BurstCompile]
 [UpdateInGroup(typeof(InitializationSystemGroup))]

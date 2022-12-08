@@ -77,7 +77,7 @@ public readonly partial struct TargetDataAspect : IAspect
         TargetInRange = targetInRange;
     }
 
-    public void Update(float3 targetPos, float3 targetDirection)
+    public void SetTargetPosition(float3 targetPos, float3 targetDirection)
     {
         targetPos += targetDirection * PredictionAmount;
 

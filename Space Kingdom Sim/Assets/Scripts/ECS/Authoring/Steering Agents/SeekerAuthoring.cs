@@ -36,6 +36,7 @@ public class SeekerAuthoring : MonoBehaviour
             AddComponent(new TargetInRange());
             AddComponent(new TargetData());
             AddComponent(new MovementDestination());
+            AddComponent(new Direction());
 
             var seekerData = authoring.seekerData;
 

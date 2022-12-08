@@ -62,9 +62,9 @@ public partial class StatisticsSystem : SystemBase
         Entities.WithAll<Selected>()
             .ForEach((Entity e, in TargetData targetData, in MovementDestination movementTarget, in LocalTransform transform) =>
             {
-                ui.ShowUnitDebugInfo(0, $"My pos: {(int3)transform.Position}");
-                ui.ShowUnitDebugInfo(1, $"In range: {EntityManager.IsComponentEnabled<TargetInRange>(e)}");
-                ui.ShowUnitDebugInfo(2, $"Distance to target: {(int)movementTarget.distanceToTarget}");
+                ui.AddLabel($"My pos: {(int3)transform.Position}");
+                ui.AddLabel($"In range: {EntityManager.IsComponentEnabled<TargetInRange>(e)}");
+                ui.AddLabel($"Distance to target: {(int)movementTarget.distanceToTarget}");
 
                 var target = "";
                 var targetPos = default(int3);
@@ -75,8 +75,8 @@ public partial class StatisticsSystem : SystemBase
                     targetPos = (int3)EntityManager.GetComponentData<LocalTransform>(targetData.target).Position;
                 }
 
-                ui.ShowUnitDebugInfo(3, $"Target: {target}");
-                ui.ShowUnitDebugInfo(4, $"Target pos: {targetPos}");
+                ui.AddLabel($"Target: {target}");
+                ui.AddLabel($"Target pos: {targetPos}");
 
             }).WithoutBurst().WithStoreEntityQueryInField(ref selectedQuery).Run();
 

@@ -1,7 +1,9 @@
-﻿using Unity.Entities;
+﻿using JetBrains.Annotations;
+using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Transforms;
+using UnityEngine;
 
 public struct FollowMouse : IComponentData
 {
@@ -25,9 +27,16 @@ public struct SteeringAgent : IComponentData
     public float maxSpeed;
 }
 
+public struct Direction : IComponentData
+{
+    public float3 directionToTarget;
+}
+
 public readonly partial struct SteeringAgentAspect : IAspect
 {
     readonly RefRW<PhysicsVelocity> velocity;
+    readonly RefRW<Direction> direction;
+
     readonly RefRO<SteeringAgent> steeringAgent;
     readonly RefRO<LocalTransform> transform;
 
@@ -42,15 +51,14 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
     public float MaxForce => steeringAgent.ValueRO.maxForce;
 
-    public float SlowRadius => steeringAgent.ValueRO.slowRadius;
-
     public void Steer(float3 targetPosition, float attractionForce)
     {
-        var desiredDirection = GetDesiredDirection(targetPosition, out var targetIsBehind);
+        var directionToTarget = targetPosition - Position;
+        var desiredDirection = GetDesiredDirection(directionToTarget, out var targetIsBehind);
 
-        var slowRaius = targetIsBehind ? 0 : SlowRadius;
+        var slowRaius = steeringAgent.ValueRO.slowRadius; //targetIsBehind ? 0 : steeringAgent.ValueRO.slowRadius;
 
-        var distanceToTarget = math.length(desiredDirection);
+        var distanceToTarget = math.length(directionToTarget);
         var desiredSpeed = GetDesiredSpeed(slowRaius, distanceToTarget);
 
         var desiredVelocity = MathUtils.SetMagnitude(desiredDirection, desiredSpeed);
@@ -59,12 +67,22 @@ public readonly partial struct SteeringAgentAspect : IAspect
 
         steeringForce = MathUtils.ClampMagnitude(steeringForce, MaxForce);
 
-        velocity.ValueRW.Linear += steeringForce * attractionForce;
+        //if (distanceToTarget < steeringAgent.ValueRO.stopRange)
+        //{
+        //    attractionForce = -1;
+        //}
+        //else
+        //{
+        //    attractionForce = 1;
+        //}
+
+        var acceleration = steeringForce * attractionForce;
+        velocity.ValueRW.Linear += acceleration;
     }
 
-    private float3 GetDesiredDirection(float3 targetPosition, out bool targetIsBehind)
+    private float3 GetDesiredDirection(float3 directionToTarget, out bool targetIsBehind)
     {
-        var desiredDirection = targetPosition - Position;
+        var desiredDirection = directionToTarget;
 
         targetIsBehind = math.dot(Forward, desiredDirection) < 0;
 
@@ -82,7 +100,7 @@ public readonly partial struct SteeringAgentAspect : IAspect
     private float GetDesiredSpeed(float slowRaius, float distanceToTarget)
     {
         return distanceToTarget > slowRaius
-            ? MaxSpeed
-            : math.remap(0, slowRaius, 0, MaxSpeed, distanceToTarget);
+           ? MaxSpeed
+           : math.remap(0, slowRaius, 0, MaxSpeed, distanceToTarget);
     }
 }
