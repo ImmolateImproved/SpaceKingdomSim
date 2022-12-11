@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f9bc0a1b7bbf14d9e490c05d34839e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followMouse: 1
+  followMouse: 0
   maxSpeed: 8
   maxForce: 1
   slowRadius: 0
@@ -331,9 +331,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e385bf092ca49ef47a12e25acab13cea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxEnergy: 100
-  startEnergy: 90
-  decreasePerSeconds: 0
+  max: 55
+  startHealth: 55
 --- !u!1001 &2469933199924899907
 PrefabInstance:
   m_ObjectHideFlags: 0

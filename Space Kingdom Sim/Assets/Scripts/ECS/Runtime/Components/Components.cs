@@ -1,8 +1,30 @@
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Physics;
 using UnityEngine;
+
+public struct Timer
+{
+    public float current;
+    public float max;
+
+    public bool IsCompleted => current >= max;
+
+    public Timer(float max, bool currentEqualsMax) : this()
+    {
+        this.max = max;
+        current = currentEqualsMax ? max : 0;
+    }
+
+    public void Tick(float dt)
+    {
+        current += dt;
+    }
+
+    public void Reset()
+    {
+        current = 0;
+    }
+}
 
 public struct MousePosition : IComponentData
 {

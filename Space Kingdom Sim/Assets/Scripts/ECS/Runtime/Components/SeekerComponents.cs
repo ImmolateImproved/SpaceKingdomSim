@@ -12,7 +12,6 @@ public struct TargetInRange : IComponentData, IEnableableComponent
 public struct TargetData : IComponentData
 {
     public Entity target;
-    public float distanceToTarget;
     public int targetType;
     public bool isTargetExist;
 }
@@ -20,6 +19,7 @@ public struct TargetData : IComponentData
 public struct MovementDestination : IComponentData
 {
     public float3 targetPosition;
+    public float3 directionToTarget;
 
     public float distanceToTarget;
 
@@ -69,8 +69,11 @@ public readonly partial struct TargetDataAspect : IAspect
 
     public void SetTargetPosition(float3 targetPos)
     {
+        var directionToTarget = targetPos - Position;
+
         movementTarget.ValueRW.targetPosition = targetPos;
-        movementTarget.ValueRW.distanceToTarget = math.distance(Position, targetPos);
+        movementTarget.ValueRW.directionToTarget = math.normalizesafe(directionToTarget);
+        movementTarget.ValueRW.distanceToTarget = math.length(directionToTarget);
 
         var targetInRange = movementTarget.ValueRO.distanceToTarget <= steeringAgent.ValueRO.stopRange;
 

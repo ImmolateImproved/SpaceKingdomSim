@@ -178,7 +178,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2838231049997410975, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2838231049997410975, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -271,5 +271,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3182000629545711653, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 939626335}
   m_SourcePrefab: {fileID: 100100000, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
+--- !u!1 &7537620824612499801 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3182000629545711653, guid: f49ea516a75dfe944ad803ed4802af0b, type: 3}
+  m_PrefabInstance: {fileID: 4950509883544390012}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &939626335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7537620824612499801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8382f4e391d62a1459198b096d6354f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 4826702665880077354, guid: a40f4d88cdc21fa40ae18adc0cefe418, type: 3}
+  projectileSpawnPoint: {fileID: 7537620824612499801}
+  shootingDistance: 15
+  timeBetweenShot: 1

@@ -23,7 +23,7 @@ public partial struct EnergySystem : ISystem
         var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
         var ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
-        var energyLookup = SystemAPI.GetComponentLookup<Energy>(true);
+        var energyLookup = SystemAPI.GetComponentLookup<Health>(true);
 
         //new TargetInDistanceJob
         //{
